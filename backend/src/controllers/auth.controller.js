@@ -1,4 +1,4 @@
-import User from "../src/models/user.model.js";
+import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
 export async function signup(req, res){
@@ -27,14 +27,17 @@ export async function signup(req, res){
         const idx = Math.floor(Math.random() * 100) + 1; // random number between 1 to 100
         const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`
      
-        const newUser = new User.create({
+        const newUser = await User.create({
             fullname,
             email,
             password,
             profilePic: randomAvatar,
         });
+ 
+        // create the user in stream as well
 
-        const token = jwt.sign({userId: newUser._id}, process.env.JWT_SECRET, {expiresIn: "7d"});
+
+        const token = jwt.sign({userId: newUser._id}, process.env.JWT_SECRET_KEY, {expiresIn: "7d"});
         res.cookie("jwt", token, {
             httpOnly: true, // prevents XSS attacks
             secure: process.env.NODE_ENV === "production",
@@ -44,12 +47,30 @@ export async function signup(req, res){
         res.status(201).json({success:true, user:newUser})
     
     }catch(error){
-        console.log(error);
+        console.log("Error in signup controller" ,error);
+        res.status(500).json({message: "Server Error"});
     }
 }
 
+
+
 export async function login(req, res){
-res.send("Login Route");
+    try{
+        const {email, password} = req.body;
+
+        if(!email || !password){
+            return res.status(400).json({message:"Please fill all the fields"});
+        }
+        const user = await User.findOne({email})
+        if(!user) return res.status(401).json({message: "Invalid email or password"});
+        
+        const isPasswordCorrect = await user.matchPassword(password);
+        if(!isPasswordCorrect) return res.status(401).json({message: "Invalid email or password"});
+          
+    } catch(error){
+        console.log("Error in login controller", error);
+        res.status(500).json({message: "Server Error"});
+    }
 };
 
 

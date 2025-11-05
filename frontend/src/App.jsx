@@ -10,8 +10,8 @@ import OnboardingPage from "./pages/OnboardingPage.jsx";
 
 import { Toaster } from "react-hot-toast";
 import useAuthUser from "./hooks/useAuth.js";
-// import Layout from "./components/Layout.jsx";
 import { useThemeStore } from "./store/useThemeStore.js";
+import Layout from "./components/Layout.jsx";
 
 const App = () => {
   // const {
@@ -32,7 +32,7 @@ const App = () => {
   const { isLoading, authUser } = useAuthUser();
   const { theme } = useThemeStore();
 
-  const isAuthenticated = Boolean(authUser);
+  const isAuthenticated = Boolean(authUser); // either true or false
   const isOnboarded = authUser?.isOnboarded;
 
   if (isLoading) return <div>Loading...</div>;
@@ -40,7 +40,19 @@ const App = () => {
   return (
     <div className="h-screen" data-theme={theme}>
       <Routes>
+        <Route path="/" element={<LoginPage />} />
+
         <Route
+          path="/a"
+          element={
+            <Layout showSidebar={true}>
+              {" "}
+              <HomePage />{" "}
+            </Layout>
+          }
+        />
+
+        {/* <Route
           path="/"
           element={
             isAuthenticated && isOnboarded ? (
@@ -48,7 +60,7 @@ const App = () => {
                 <HomePage />
               </Layout>
             ) : (
-              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} /> // only authenticated
             )
           }
         />
@@ -121,7 +133,7 @@ const App = () => {
               <Navigate to="/login" />
             )
           }
-        />
+        /> */}
       </Routes>
 
       <Toaster />

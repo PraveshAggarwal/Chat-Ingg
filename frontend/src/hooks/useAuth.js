@@ -11,3 +11,5 @@ const useAuthUser = () => {
   return { isLoading: authUser.isLoading, authUser: authUser.data?.user };
 };
 export default useAuthUser;
+
+/// it's find out who is currently logged in user

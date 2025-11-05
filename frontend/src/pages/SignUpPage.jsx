@@ -4,28 +4,17 @@ import { Link } from "react-router-dom";
 import useSignUp from "../hooks/useSignUP";
 
 const SignUpPage = () => {
-  const [SignupData, setSignupData] = useState({
-    fullName: "",
+  const [signupData, setSignupData] = useState({
+    fullname: "", // same name as of backend
     email: "",
     password: "",
   });
 
-  // This is how we did it at first, without using our custom hook
-  // const queryClient = useQueryClient();
-  // const {
-  //   mutate: signupMutation,
-  //   isPending,
-  //   error,
-  // } = useMutation({
-  //   mutationFn: signup,
-  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-  // });
-
-  // This is how we did it using our custom hook - optimized version
   const { isPending, error, signupMutation } = useSignUp();
 
   const handleSignup = (e) => {
     e.preventDefault();
+    console.log("Submitting signup data:", signupData);
     signupMutation(signupData);
   };
 
@@ -73,11 +62,11 @@ const SignUpPage = () => {
                       type="text"
                       placeholder="Pravesh Aggarwal"
                       className="input input-bordered w-full"
-                      value={SignupData.fullName}
+                      value={signupData.fullname}
                       onChange={(e) =>
                         setSignupData({
-                          ...SignupData,
-                          fullName: e.target.value,
+                          ...signupData,
+                          fullname: e.target.value,
                         })
                       }
                       required
@@ -93,9 +82,9 @@ const SignUpPage = () => {
                       type="email"
                       placeholder="pravesh@gmail.com"
                       className="input input-bordered w-full"
-                      value={SignupData.email}
+                      value={signupData.email}
                       onChange={(e) =>
-                        setSignupData({ ...SignupData, email: e.target.value })
+                        setSignupData({ ...signupData, email: e.target.value })
                       }
                       required
                     />
@@ -110,10 +99,10 @@ const SignUpPage = () => {
                       type="password"
                       placeholder="********"
                       className="input input-bordered w-full"
-                      value={SignupData.password}
+                      value={signupData.password}
                       onChange={(e) =>
                         setSignupData({
-                          ...SignupData,
+                          ...signupData,
                           password: e.target.value,
                         })
                       }

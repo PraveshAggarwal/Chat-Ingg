@@ -9,50 +9,25 @@ import ChatPage from "./pages/ChatPage.jsx";
 import OnboardingPage from "./pages/OnboardingPage.jsx";
 
 import { Toaster } from "react-hot-toast";
+
+import PageLoader from "./components/PageLoader.jsx";
 import useAuthUser from "./hooks/useAuth.js";
-import { useThemeStore } from "./store/useThemeStore.js";
 import Layout from "./components/Layout.jsx";
+import { useThemeStore } from "./store/useThemeStore.js";
 
 const App = () => {
-  // const {
-  //   data: authData,
-  //   isLoading,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ["authUser"],
-  //   queryFn: async () => {
-  //     const res = await axiosInstance.get("/auth/me");
-  //     return res.data;
-  //   },
-  //   retry: false, // auth check
-  // });
-
-  // const authUser = authData?.user;
-
   const { isLoading, authUser } = useAuthUser();
   const { theme } = useThemeStore();
 
-  const isAuthenticated = Boolean(authUser); // either true or false
+  const isAuthenticated = Boolean(authUser);
   const isOnboarded = authUser?.isOnboarded;
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <PageLoader />;
 
   return (
     <div className="h-screen" data-theme={theme}>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-
         <Route
-          path="/a"
-          element={
-            <Layout showSidebar={true}>
-              {" "}
-              <HomePage />{" "}
-            </Layout>
-          }
-        />
-
-        {/* <Route
           path="/"
           element={
             isAuthenticated && isOnboarded ? (
@@ -60,7 +35,7 @@ const App = () => {
                 <HomePage />
               </Layout>
             ) : (
-              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} /> // only authenticated
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
             )
           }
         />
@@ -133,7 +108,7 @@ const App = () => {
               <Navigate to="/login" />
             )
           }
-        /> */}
+        />
       </Routes>
 
       <Toaster />

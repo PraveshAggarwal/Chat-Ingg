@@ -7,6 +7,7 @@ import {
   UserCheckIcon,
 } from "lucide-react";
 import NoNotificationsFound from "../components/NoNotificationsFound";
+import { Link } from "react-router-dom";
 
 const NotificationsPage = () => {
   const queryClient = useQueryClient();
@@ -130,10 +131,13 @@ const NotificationsPage = () => {
                               Recently
                             </p>
                           </div>
-                          <div className="badge badge-success">
-                            <MessageSquareIcon className="h-3 w-3 mr-1" />
-                            New Friend
-                          </div>
+
+                          <Link to={`/chat/${notification.recipient._id}`}>
+                            <div className="badge badge-success">
+                              <MessageSquareIcon className="h-3 w-3 mr-1" />
+                              New Friend
+                            </div>
+                          </Link>
                         </div>
                       </div>
                     </div>

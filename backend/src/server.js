@@ -3,17 +3,17 @@ import "dotenv/config";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-import authRoutes from "./routes/auth.js"
-import userRoutes from "./routes/user.js"
-import chatRoutes from "./routes/chat.routes.js"
+import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/user.js";
+import chatRoutes from "./routes/chat.routes.js";
 import { connectDB } from "./lib/db.js";
 
 const app = express();
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
     credentials: true, // allow frontend to send cookies
   })
 );
@@ -21,11 +21,11 @@ app.use(
 app.use(express.json());
 app.use(cookieParser()); // to use cookie for token
 
-app.use("/api/auth", authRoutes)
-app.use("/api/users", userRoutes)
-app.use("/api/chat", chatRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/chat", chatRoutes);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    connectDB();
+  console.log(`Server is running on port ${PORT}`);
+  connectDB();
 });
